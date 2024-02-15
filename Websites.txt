@@ -1,0 +1,4 @@
+https://github.com/openai/openai-python
+https://platform.openai.com/docs/assistants/tools
+https://platform.openai.com/usage
+https://www.youtube.com/watch?v=5rcjGjgJNQc&ab_channel=AssemblyAI
