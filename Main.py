@@ -50,7 +50,7 @@ assistant = client.beta.assistants.create(
 )
 
 thread = client.beta.threads.create()
-
+response_counter = 0
 while True:
     uesr_sentance = input("young trainer, type your next move: ")
 
@@ -64,32 +64,34 @@ while True:
 
         if run.status == "completed":
             messages = client.beta.threads.messages.list(thread_id=thread.id)
+            response_counter += 1
 
             print("Prof.Oak" + ": " + messages.data[0].content[0].text.value)
 
-            response = client.images.generate(
-                model="dall-e-3",
-                prompt="make a photo in the concept of "
-                       "pokemon Fire Red game out of this sentence: " +
-                       messages.data[0].content[0].text.value,
-                size="1024x1024",
-                quality="standard",
-                n=1,
-            )
+            if response_counter == 0 or response_counter % 4 == 0:
+                response = client.images.generate(
+                    model="dall-e-3",
+                    prompt="make a photo in the concept of "
+                           "pokemon Fire Red game out of this sentence: " +
+                           messages.data[0].content[0].text.value,
+                    size="1024x1024",
+                    quality="standard",
+                    n=1,
+                )
 
-            image_url = response.data[0].url
+                image_url = response.data[0].url
 
-            # Download the image from the URL using urllib
-            with urllib.request.urlopen(image_url) as url:
-                img_data = url.read()
-                # Save the image data to a file
-                filename = 'pokemon_image.jpg'
-                with open(filename, 'wb') as f:
-                    f.write(img_data)
+                # Download the image from the URL using urllib
+                with urllib.request.urlopen(image_url) as url:
+                    img_data = url.read()
+                    # Save the image data to a file
+                    filename = 'pokemon_image.jpg'
+                    with open(filename, 'wb') as f:
+                        f.write(img_data)
 
-            # Open and display the image using PIL
-            img = Image.open(filename)
-            img.show()
+                # Open and display the image using PIL
+                img = Image.open(filename)
+                img.show()
 
             # client.beta.assistants.delete(assistant.id)
 
